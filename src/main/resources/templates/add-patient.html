@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="template">
+<body>
+<div class="container my-3">
+    <!--    Adding patient form -->
+    <div class="card">
+        <div class="card-header">
+            <h4>Ajouter un patient</h4>
+        </div>
+        <div class="card-body">
+            <form id="add-patient-form" method="post" action="/patients">
+                <div class="mb-3">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="nom" name="nom" th:value="${patient.nom}">
+                    <span class="text-danger" th:errors="${patient.nom}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="dateNaissance" class="form-label">Date de naissance</label>
+                    <input type="date" class="form-control" id="dateNaissance" name="dateNaissance"
+                           th:value="${patient.dateNaissance}">
+                    <span class="text-danger" th:errors="${patient.dateNaissance}"></span>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="malade" name="malade"
+                           th:checked="${patient.malade}">
+                    <label class="form-check-label" for="malade">Malade?</label>
+                    <span class="text-danger" th:errors="${patient.malade}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="score" class="form-label">Score</label>
+                    <input type="number" class="form-control" id="score" name="score" th:value="${patient.score}">
+                    <span class="text-danger" th:errors="${patient.score}"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+            </form>
+        </div>
+    </div>
+    <!--    Patients list -->
+
+    <script src="/js/patients.js"></script>
+</div>
+</body>
+</html>
