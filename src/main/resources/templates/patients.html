@@ -30,8 +30,8 @@
                 </tr>
                 <tr th:each="patient : ${patients.content}">
                     <td th:text="${patient.nom}"></td>
-                    <td th:text="${patient.dateNaissance}"></td>
-                    <td th:text="${patient.malade}"></td>
+                    <td th:text="${#dates.format(patient.dateNaissance, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${patient.malade != null && patient.malade ? 'Oui' : 'Non'}"></td>
                     <td th:text="${patient.score}"></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{'/patients/edit/' + ${patient.id}}">
@@ -70,25 +70,25 @@
             </nav>
         </div>
     </div>
-</div>
-<div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this patient?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger" id="delete-btn">Delete</a>
+    <div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this patient?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" id="delete-btn">Delete</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="/js/patients.js"></script>
+    <script src="/js/patients.js"></script>
+</div>
 </body>
 </html>

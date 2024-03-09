@@ -1,5 +1,6 @@
 package ma.enset.jpa_hibernate.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ma.enset.jpa_hibernate.entities.Patient;
 import ma.enset.jpa_hibernate.services.interfaces.IPatientService;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/patients")
 @RequiredArgsConstructor
 public class PatientController {
-    private final IPatientService userService;
+    private final IPatientService patientService;
 
     @GetMapping
     public String getPatients(Model model,
                               @RequestParam(defaultValue = "") String kw,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "5") int size) {
-        Page<Patient> patients = userService.searchPatients(kw, page, size);
+        Page<Patient> patients = patientService.searchPatients(kw, page, size);
         model.addAttribute("patients", patients);
         model.addAttribute("pages", new int[patients.getTotalPages()]);
         model.addAttribute("currentPage", page);
@@ -36,34 +38,57 @@ public class PatientController {
 
     @GetMapping("delete/{id}")
     public String delete(@PathVariable Long id) {
-        userService.deletePatient(id);
+        patientService.deletePatient(id);
         return "redirect:/patients";
     }
 
     @GetMapping("add")
     public String add(Model model) {
-        model.addAttribute("patient", new Patient());
+        Patient patient = new Patient();
+        patient.setScore(50);
+        patient.setMalade(false);
+        model.addAttribute("patient", patient);
         return "add-patient";
     }
 
-    @PostMapping
-    public String add(Model model, @ModelAttribute Patient patient) {
-        userService.createPatient(patient);
+    @GetMapping("edit/{id}")
+    public String edit(Model model, @PathVariable Long id) {
+        model.addAttribute("patient", patientService.getPatient(id));
+        return "edit-patient";
+    }
+
+    @PostMapping("edit/{id}")
+    public String edit(Model model, @PathVariable Long id, @Valid Patient patient, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("patient", patient);
+            return "edit-patient";
+        }
+        patientService.updatePatient(id, patient);
         return "redirect:/patients";
     }
 
-//    @GetMapping("/{username}")
-//    public ResponseEntity<?> getPatient(@PathVariable String username) {
+    @PostMapping
+    public String add(Model model, @Valid Patient patient, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("patient", patient);
+            return "add-patient";
+        }
+        patientService.createPatient(patient);
+        return "redirect:/patients";
+    }
+
+//    @GetMapping("/{patientname}")
+//    public ResponseEntity<?> getPatient(@PathVariable String patientname) {
 //        try {
-//            return ResponseEntity.ok(userService.findPatientByPatientname(username));
+//            return ResponseEntity.ok(patientService.findPatientByPatientname(patientname));
 //        } catch (RuntimeException e) {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient not found");
 //        }
 //    }
 //
 //    @PostMapping
-//    public ResponseEntity<Patient> addPatient(@RequestBody Patient user) {
-//        return ResponseEntity.ok(userService.addPatient(user));
+//    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
+//        return ResponseEntity.ok(patientService.addPatient(patient));
 //    }
 
 }

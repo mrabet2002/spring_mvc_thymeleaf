@@ -53,7 +53,7 @@ public class JpaHibernateApplication {
 				p.setDateNaissance(calendar.getTime());
 
 				p.setMalade(i % 2 == 0);
-				p.setScore(10 + i);
+				p.setScore(50 + i);
 
 				patientService.createPatient(p);
 			}
