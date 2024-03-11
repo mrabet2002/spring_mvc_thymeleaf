@@ -46,10 +46,10 @@ public class SecurityConfig {
                         authorize -> authorize.anyRequest().authenticated()
                 )
 
-                .formLogin(form -> form.loginPage("/security/login").permitAll())
+                .formLogin(form -> form.loginPage("/login").permitAll())
 
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-                        httpSecurityExceptionHandlingConfigurer.accessDeniedPage("/security/access-denied"))
+                        httpSecurityExceptionHandlingConfigurer.accessDeniedPage("/access-denied"))
 
                 .build();
     }
